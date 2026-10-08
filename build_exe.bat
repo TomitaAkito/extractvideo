@@ -1,25 +1,21 @@
 @echo off
-chcp 65001 >nul
 cd /d "%~dp0"
 
-echo [1/3] 依存ライブラリをインストールします...
+echo [1/3] Installing dependencies...
 python -m pip install -r requirements.txt pyinstaller
-if errorlevel 1 goto :error
+if errorlevel 1 goto error
 
-echo [2/3] exeをビルドします...
-python -m PyInstaller --noconfirm --clean --onefile --windowed ^
-    --name MultiVideoFrameExtractor ^
-    --exclude-module tkinter ^
-    main.py
-if errorlevel 1 goto :error
+echo [2/3] Building exe...
+python -m PyInstaller --noconfirm --clean --onefile --windowed --name MultiVideoFrameExtractor --exclude-module tkinter main.py
+if errorlevel 1 goto error
 
-echo [3/3] 完了しました。
-echo   出力先: %~dp0dist\MultiVideoFrameExtractor.exe
-echo   ※ 高速変換には ffmpeg が PATH に通っている必要があります (README参照)
+echo [3/3] Done.
+echo   Output: %~dp0dist\MultiVideoFrameExtractor.exe
+echo   Note: ffmpeg must be in PATH for fast proxy creation (see README).
 pause
 exit /b 0
 
 :error
-echo ビルドに失敗しました。上のエラーメッセージを確認してください。
+echo Build failed. Check the error messages above.
 pause
 exit /b 1
